@@ -23,7 +23,7 @@ body{
     background:linear-gradient(135deg,#ff4e88,#ff1e56);
     color:white;
     text-align:center;
-    overflow-x:hidden;
+    overflow:hidden;
 }
 
 .container{
@@ -34,6 +34,7 @@ body{
     width:90%;
     max-width:500px;
     animation:fadeIn 1s ease;
+    position:relative;
 }
 
 button{
@@ -94,7 +95,6 @@ button:hover{
 
 <div class="container" id="yesSection" style="display:none;">
   <h2>💞 You Said YES 💞</h2>
-  <img src="photo4.jpg" id="lovePhoto">
 
   <h3>⏳ Since The Day We Met</h3>
   <div id="loveCounter"></div>
@@ -108,11 +108,11 @@ button:hover{
   <div id="proposalResult" style="margin-top:20px;"></div>
 </div>
 
-
+<!-- Optional Background Music -->
 
 <script>
 
-/* URL NAMES */
+/* URL PARAMETERS */
 const params = new URLSearchParams(window.location.search);
 const fromName = params.get("from") || "";
 const toName   = params.get("to") || "";
@@ -123,7 +123,7 @@ if(fromName && toName){
 }
 document.getElementById("questionText").innerText = questionText;
 
-/* NO BUTTON RUNS AWAY ON FIRST PAGE */
+/* NO BUTTON RUNS AWAY */
 document.getElementById("noBtn").addEventListener("mouseover",function(){
     this.style.position="relative";
     this.style.left=(Math.random()*100-50)+"px";
@@ -136,14 +136,17 @@ document.getElementById("yesBtn").addEventListener("click",function(){
     document.getElementById("mainContent").style.display="none";
     document.getElementById("yesSection").style.display="block";
 
-    document.getElementById("bgMusic").play();
+    const music = document.getElementById("bgMusic");
+    if(music){
+        music.play().catch(()=>{});
+    }
 
     startCounter();
 });
 
 /* LOVE COUNTER */
 function startCounter(){
-    const startDate=new Date("2022-08-25 00:00:00"); // CHANGE DATE
+    const startDate=new Date("2022-08-25T00:00:00");
 
     setInterval(()=>{
         const now = new Date();
@@ -166,24 +169,19 @@ const marryYes = document.getElementById("marryYes");
 marryYes.addEventListener("click",function(){
     document.getElementById("proposalResult").innerHTML=
     `<div class="ring">💍</div>
-     <h2>I Love You Forever Chifae❤️</h2>
+     <h2>I Love You Forever Chifae ❤️</h2>
      <p>You just made me the happiest person alive 💖</p>`;
 });
 
-// NO BUTTON DODGES
-marryNo.addEventListener("mouseenter", moveNoButton);
-
-function moveNoButton(){
+marryNo.addEventListener("mouseenter",function(){
     const maxX = window.innerWidth - marryNo.offsetWidth;
     const maxY = window.innerHeight - marryNo.offsetHeight;
 
-    const randomX = Math.floor(Math.random() * maxX);
-    const randomY = Math.floor(Math.random() * maxY);
-
     marryNo.style.position = "absolute";
-    marryNo.style.left = randomX + "px";
-    marryNo.style.top = randomY + "px";
-}
+    marryNo.style.left = Math.random()*maxX + "px";
+    marryNo.style.top = Math.random()*maxY + "px";
+});
+
 </script>
 
 </body>
